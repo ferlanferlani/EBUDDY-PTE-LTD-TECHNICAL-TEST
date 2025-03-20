@@ -1,34 +1,49 @@
-import { useRouter } from "next/navigation";
-import { signOut } from "firebase/auth";
-import { auth } from "@/config/firebase";
-import Button from "../atoms/Button";
-import UserInfo from "../molecules/UserInfo";
-import Typography from "../atoms/Typography";
-import { Box } from "@mui/material";
+"use client";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { getAllUsers } from "@/store/userSlice";
+import {
+  Button,
+  Typography,
+  Box,
+  CircularProgress,
+  List,
+  ListItem,
+  ListItemText,
+} from "@mui/material";
 
-type DashboardContentProps = {
-  email: string | null;
-};
+export default function DashboardContent() {
+  const dispatch = useAppDispatch();
+  const { data, loading, error } = useAppSelector((state) => state.user);
 
-export default function DashboardContent({ email }: DashboardContentProps) {
-  const router = useRouter();
-
-  const handleLogout = async () => {
-    await signOut(auth);
-    router.push("/");
+  const handleFetchUsers = () => {
+    dispatch(getAllUsers());
   };
 
   return (
     <Box>
-      <Typography variant="h4">Welcome to Dashboard</Typography>
-      {email ? (
-        <UserInfo email={email} />
-      ) : (
-        <Typography variant="body1">Loading user info...</Typography>
-      )}
-      <Button onClick={handleLogout} color="error">
-        Logout
+      <Typography variant="h4">User List</Typography>
+
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={handleFetchUsers}
+        sx={{ mt: 2 }}
+      >
+        Fetch All Users
       </Button>
+
+      {loading && <CircularProgress sx={{ mt: 2 }} />}
+      {error && <Typography color="error">{error}</Typography>}
+
+      {data.length > 0 && (
+        <List sx={{ mt: 2 }}>
+          {data.map((user) => (
+            <ListItem key={user.id}>
+              <ListItemText primary={user.displayName} secondary={user.email} />
+            </ListItem>
+          ))}
+        </List>
+      )}
     </Box>
   );
 }
