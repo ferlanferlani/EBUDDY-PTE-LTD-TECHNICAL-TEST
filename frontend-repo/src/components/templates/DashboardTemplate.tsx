@@ -8,7 +8,7 @@ type DashboardTemplateProps = {
 export default function DashboardTemplate({ email }: DashboardTemplateProps) {
   return (
     <Container>
-      <DashboardContent />
+      <DashboardContent email={email} />
     </Container>
   );
 }

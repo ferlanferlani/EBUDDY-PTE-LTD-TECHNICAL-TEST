@@ -8,12 +8,15 @@ import { CircularProgress, Container } from "@mui/material";
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
+  const [isClient, setIsClient] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
+    setIsClient(true); // Tandai bahwa kita ada di client
+
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (!currentUser) {
-        router.push("/"); // Redirect ke to landing page if user not logged in
+        router.push("/"); // Redirect ke landing page jika belum login
       } else {
         setUser(currentUser);
       }
@@ -22,6 +25,10 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 
     return () => unsubscribe();
   }, [router]);
+
+  if (!isClient) {
+    return null; // Jangan render apapun sampai kita yakin ini client
+  }
 
   if (loading) {
     return (

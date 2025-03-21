@@ -13,15 +13,17 @@ const initialState: UserState = {
   error: null,
 };
 
-// Async Thunk untuk Fetch All Users
+// ✅ Async Thunk untuk Fetch All Users
 export const getAllUsers = createAsyncThunk(
-  "fetch-user-data",
+  "user/fetchAll",
   async (_, { rejectWithValue }) => {
     try {
       const data = await fetchAllUsers();
       return data;
-    } catch (error) {
-      return rejectWithValue((error as Error).message);
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message || "Gagal mengambil data user."
+      );
     }
   }
 );
