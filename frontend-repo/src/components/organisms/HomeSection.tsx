@@ -13,7 +13,9 @@ export default function HomeSection() {
       textAlign="center"
     >
       <HomeText />
-      <Button href="/auth/login">Go to Login Page</Button>
+      <Button sx={{ mt: 2 }} href="/auth/login">
+        Go to Login Page
+      </Button>
     </Box>
   );
 }

@@ -57,6 +57,14 @@ export default function LoginForm() {
       <Button onClick={handleLogin} disabled={isLoading}>
         {isLoading ? "Logging in..." : "Login"}
       </Button>
+      <span
+        onClick={() => router.push("/")}
+        style={{ cursor: "pointer", marginTop: 8, textAlign: "center" }}
+      >
+        <Typography variant="body1" color="primary">
+          Back to Home Page
+        </Typography>
+      </span>
     </>
   );
 }
